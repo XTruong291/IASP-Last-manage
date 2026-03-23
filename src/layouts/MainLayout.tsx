@@ -14,6 +14,11 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
             label: "Quản lý sinh viên",
             icon: <UsergroupAddOutlined />,
         },
+        {
+            key: "/teachers",
+            label: "Quản lý giảng viên",
+            icon: <UsergroupAddOutlined />,
+        }
     ];
 
     // Bạn có thể đổi mã màu này thành màu hex mà dự án bạn đang dùng (VD: #141414 hoặc #001529)
