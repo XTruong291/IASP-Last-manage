@@ -5,22 +5,22 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
     const navigate = useNavigate()
 
-    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const onFinish = async (values) => {
         try {
             const res = await axios.post('http://103.166.183.82:4040/api/v1/user/login', values);
-
+            console.log(res, 'response');
             console.log('Login success:', res.data);
 
-            navigate("/dashboard")
+            navigate("/students")
             // 👉 lưu token
-            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('token', res.data.accessToken);
 
         } catch (error: any) {
             console.log('Login failed:', error.response?.data);
         }
     };
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
     return (
@@ -35,7 +35,7 @@ const Login = () => {
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="on">
-                        <Form.Item<FieldType>
+                        <Form.Item
                             label="Username"
                             name="email"
                             rules={[{ required: true, message: 'Please input your username!' }]}
@@ -43,17 +43,17 @@ const Login = () => {
                             <Input />
                         </Form.Item>
 
-                        <Form.Item<FieldType>
+                        <Form.Item
                             label="Password"
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
                             <Input.Password />
                         </Form.Item>
-
-                        <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
+                        {/* 
+                        <Form.Item name="remember" valuePropName="checked" label={null}>
                             <Checkbox>Remember me</Checkbox>
-                        </Form.Item>
+                        </Form.Item> */}
 
                         <Form.Item label={null}>
                             <Button type="primary" htmlType="submit">

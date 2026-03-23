@@ -1,25 +1,56 @@
-import { Table } from "antd";
+import { Button, Form, Input, message, Modal, Table, Tabs, Popconfirm } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import MainLayout from "../layouts/MainLayout";
 
 const Student = () => {
 
+    // 1. Cập nhật Interface thêm trường _id
     interface Student {
-        key: string;
-        name: string;
+        _id: string;
+        fullName: string;
         email: string;
-        class: string;
-        studentId: string;
+        department: string;
+        identityCode: string;
         phoneNumber: string;
     }
+
     const [data, setData] = useState<Student[]>([]);
     const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState<number>(1);
+    const [limit, setLimit] = useState<number>(10);
+    const [total, setTotal] = useState<number>(1);
+
+    const [form] = Form.useForm();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 2. Hàm xử lý Xóa truyền vào _id
+    const handleDeleteStudent = async (studentId: string) => {
+        try {
+            await axios.delete(`http://103.166.183.82:4040/api/v1/student/${studentId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            message.success("Xóa sinh viên thành công!");
+            // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
+            if (data.length === 1 && page > 1) {
+                setPage(page - 1);
+            } else {
+                fetchData();
+            }
+        } catch (error) {
+            console.error("Error deleting student:", error);
+            message.error("Có lỗi xảy ra khi xóa sinh viên!");
+        }
+    };
 
     const columns = [
         {
             title: "Họ tên",
-            dataIndex: "name",
-            key: "name",
+            dataIndex: "fullName",
+            key: "fullName",
         },
         {
             title: "Email",
@@ -28,62 +59,138 @@ const Student = () => {
         },
         {
             title: "Lớp hành chính",
-            dataIndex: "class",
-            key: "class",
+            dataIndex: "department",
+            key: "department",
         },
         {
             title: "Mã sinh viên",
-            dataIndex: "studentId",
-            key: "studentId",
+            dataIndex: "identityCode",
+            key: "identityCode",
         },
         {
             title: "Số điện thoại",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
         },
-
+        {
+            title: "Hành động",
+            key: "action",
+            render: (_: any, record: Student) => (
+                <Popconfirm
+                    title="Xóa sinh viên"
+                    description={`Bạn có chắc chắn muốn xóa sinh viên ${record.fullName} không?`}
+                    // 3. Trỏ đúng vào record._id khi click xóa
+                    onConfirm={() => handleDeleteStudent(record._id)}
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                >
+                    <Button type="text" danger>Xóa</Button>
+                </Popconfirm>
+            ),
+        },
     ];
 
     const fetchData = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
-            const response = await axios.get("http://103.166.183.82:4040/api/v1/user/info/me",
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
+            const response = await axios.get("http://103.166.183.82:4040/api/v1/student/pageable", {
+                params: { page, limit },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
-            )
+            });
 
-            const user = response.data;
-
-            const formatData = [{
-                key: user.id,
-                name: user.name,
-                email: user.email,
-                class: user.class,
-                studentId: user.studentId,
-                phoneNumber: user.phoneNumber,
-            }];
-
-            setData(formatData);
-
+            setTotal(response.data.total);
+            setData(response.data.data);
         } catch (error) {
             console.error("Error fetching data:", error);
+            message.error("Lấy dữ liệu thất bại!");
         }
         setLoading(false);
-    }
+    };
+
+    const handleAddStudent = async (values: any) => {
+        setLoading(true);
+        try {
+            await axios.post("http://103.166.183.82:4040/api/v1/student", values, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            message.success("Thêm sinh viên thành công!");
+            setIsModalOpen(false);
+            form.resetFields();
+            fetchData();
+
+        } catch (error) {
+            console.error("Error adding student:", error);
+            message.error("Có lỗi xảy ra khi thêm sinh viên!");
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, [page, limit]);
+
     return (
-        <>
+        <MainLayout>
+            <Tabs
+                items={[{
+                    key: '1',
+                    label: <h2>Quản lý sinh viên</h2>,
+                    children: <Button onClick={() => setIsModalOpen(true)} type="primary">Thêm mới</Button>,
+                }]}
+                style={{ marginBottom: 20 }}
+            />
             <Table
                 columns={columns}
                 dataSource={data}
-                loading={loading} />
-        </>
-    )
+                loading={loading}
+                // 4. Set rowKey bằng _id để Ant Design map dữ liệu chuẩn xác
+                rowKey="_id"
+                pagination={{
+                    current: page,
+                    pageSize: limit,
+                    total: total,
+                    onChange: setPage
+                }}
+            />
+
+            <Modal
+                title="Thêm sinh viên"
+                open={isModalOpen}
+                onOk={() => form.submit()}
+                onCancel={() => {
+                    setIsModalOpen(false);
+                    form.resetFields();
+                }}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleAddStudent}
+                >
+                    <Form.Item name="fullName" label="Họ tên" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
+                        <Input placeholder="Nhập họ và tên" />
+                    </Form.Item>
+                    <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }, { type: 'email', message: 'Email không đúng định dạng!' }]}>
+                        <Input placeholder="Nhập địa chỉ email" />
+                    </Form.Item>
+                    <Form.Item name="department" label="Lớp hành chính" rules={[{ required: true, message: 'Vui lòng nhập lớp hành chính!' }]}>
+                        <Input placeholder="Nhập lớp hành chính" />
+                    </Form.Item>
+                    <Form.Item name="identityCode" label="Mã sinh viên" rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}>
+                        <Input placeholder="Nhập mã sinh viên" />
+                    </Form.Item>
+                    <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
+                        <Input placeholder="Nhập số điện thoại" />
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </MainLayout>
+    );
 };
 
 export default Student;

@@ -8,10 +8,7 @@ const AppRoutes = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/dashboard" element={<MainLayout />}>
-                    {/* các page nằm trong layout */}
-                    <Route path="students" element={<Student />} />
-                </Route>
+                <Route path="/students" element={<Student />} />
             </Routes>
         </BrowserRouter>
     );
