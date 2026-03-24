@@ -1,6 +1,8 @@
 import { Button, Card, Checkbox, Form, Input, type FormProps } from "antd"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import FitImage from '../assets/FIT.png';
+
 
 const Login = () => {
     const navigate = useNavigate()
@@ -25,6 +27,12 @@ const Login = () => {
     };
     return (
         <>
+            <div style={{ backgroundColor: "#001529", padding: 10 , display: "flex" ,alignItems: 'center', gap: 30,}}>
+                <div>
+                    <img width="50px" style={{ display: "flex", alignItems: "center", marginLeft: 20 }} src={FitImage} alt="Logo" />
+                </div>
+                <h1>NEU Virtural Online</h1>
+            </div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
                 <Card title='Login' variant="borderless" style={{ width: 400 }}>
                     <Form
@@ -55,7 +63,7 @@ const Login = () => {
                             <Checkbox>Remember me</Checkbox>
                         </Form.Item> */}
 
-                        <Form.Item label={null}>
+                        <Form.Item label={null} style={{textAlign: "center"}}>
                             <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>

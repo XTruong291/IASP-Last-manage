@@ -1,14 +1,14 @@
 import { Button, message, Popconfirm, Table, Tabs } from "antd";
 import MainLayout from "../layouts/MainLayout";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Teacher = () => {
     const [data, setData] = useState<Teacher[]>([]);
-        const [loading, setLoading] = useState(false);
-        const [page, setPage] = useState<number>(1);
-        const [limit, setLimit] = useState<number>(10);
-        const [total, setTotal] = useState<number>(1);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState<number>(1);
+    const [limit, setLimit] = useState<number>(10);
+    const [total, setTotal] = useState<number>(1);
 
 
 
@@ -17,13 +17,13 @@ const Teacher = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("http://103.166.183.82:4040/api/v1/student/pageable", {
+            const response = await axios.get("http://103.166.183.82:4040/api/v1/teacher/pageable", {
                 params: { page, limit },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
+            console.log(response, ' res');
             setTotal(response.data.total);
             setData(response.data.data);
         } catch (error) {
@@ -32,10 +32,11 @@ const Teacher = () => {
         }
         setLoading(false);
     };
+    console.log(data, 'data')
 
     const handleDeleteStudent = async (teacaherId: string) => {
         try {
-            await axios.delete(`http://103.166.183.82:4040/api/v1/student/${teacaherId}`, {
+            await axios.delete(`http://103.166.183.82:4040/api/v1/teacher/${teacaherId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -108,17 +109,24 @@ const Teacher = () => {
         },
     ];
 
+
+    useEffect(() => {
+        fetchData()
+    }, [])
     return (
         <MainLayout>
             <Tabs
                 items={[{
                     key: '1',
-                    label: <h2>Quản lý sinh viên</h2>,
+                    label: <h2>Quản lý giảng viên</h2>,
                     children: <Button type="primary">Thêm mới</Button>,
                 }]}
                 style={{ marginBottom: 20 }}
             />
-            <Table/>
+            <Table
+                columns={columns}
+                dataSource={data}
+            />
         </MainLayout>
     )
 }

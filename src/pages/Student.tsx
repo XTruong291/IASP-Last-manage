@@ -25,6 +25,7 @@ const Student = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // 2. Hàm xử lý Xóa truyền vào _id
+    
     const handleDeleteStudent = async (studentId: string) => {
         try {
             await axios.delete(`http://103.166.183.82:4040/api/v1/student/${studentId}`, {
@@ -32,7 +33,6 @@ const Student = () => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
             message.success("Xóa sinh viên thành công!");
             // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
             if (data.length === 1 && page > 1) {
@@ -112,11 +112,13 @@ const Student = () => {
     const handleAddStudent = async (values: any) => {
         setLoading(true);
         try {
-            await axios.post("http://103.166.183.82:4040/api/v1/student", values, {
+            await axios.post("http://103.166.183.82:4040/api/v1/student", values, 
+                {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
-            });
+            }
+        );
 
             message.success("Thêm sinh viên thành công!");
             setIsModalOpen(false);
