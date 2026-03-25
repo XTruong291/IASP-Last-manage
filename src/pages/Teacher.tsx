@@ -44,7 +44,7 @@ const Teacher = () => {
                 }
             });
 
-            message.success("Xóa sinh viên thành công!");
+            message.success("Xóa giảng viên thành công!");
             // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
             if (data.length === 1 && page > 1) {
                 setPage(page - 1);
@@ -137,48 +137,50 @@ const Teacher = () => {
     }, [])
     return (
         <MainLayout>
-            <Tabs
-                items={[{
-                    key: '1',
-                    label: <h2>Quản lý giảng viên</h2>,
-                    children: <Button type="primary" onClick={() => { setIsModalOpen(true) }}>Thêm mới</Button>,
-                }]}
-                style={{ marginBottom: 20 }}
-            />
-            <Modal
-                title="Basic Modal"
-                closable={{ 'aria-label': 'Custom Close Button' }}
-                open={isModalOpen}
-                onOk={() => form.submit()}
-                onCancel={() => { setIsModalOpen(false) }}
-            >
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={handleAddTeacher}
+            <div style={{ border: "1px solid", padding: 24, borderRadius: 10, margin: 10 }}>
+                <Tabs
+                    items={[{
+                        key: '1',
+                        label: <h2>Quản lý giảng viên</h2>,
+                        children: <Button type="primary" onClick={() => { setIsModalOpen(true) }}>Thêm mới</Button>,
+                    }]}
+                    style={{ marginBottom: 20 }}
+                />
+                <Modal
+                    title="Basic Modal"
+                    closable={{ 'aria-label': 'Custom Close Button' }}
+                    open={isModalOpen}
+                    onOk={() => form.submit()}
+                    onCancel={() => { setIsModalOpen(false) }}
                 >
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleAddTeacher}
+                    >
 
-                    <Form.Item name="fullName" label="Họ tên" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
-                        <Input placeholder="Nhập họ và tên" />
-                    </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }, { type: 'email', message: 'Email không đúng định dạng!' }]}>
-                        <Input placeholder="Nhập địa chỉ email" />
-                    </Form.Item>
-                    <Form.Item name="department" label="Lớp hành chính" rules={[{ required: true, message: 'Vui lòng nhập lớp hành chính!' }]}>
-                        <Input placeholder="Nhập lớp hành chính" />
-                    </Form.Item>
-                    <Form.Item name="identityCode" label="Mã sinh viên" rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}>
-                        <Input placeholder="Nhập mã giảng viên" />
-                    </Form.Item>
-                    <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
-                        <Input placeholder="Nhập số điện thoại" />
-                    </Form.Item>
-                </Form>
-            </Modal>
-            <Table
-                columns={columns}
-                dataSource={data}
-            />
+                        <Form.Item name="fullName" label="Họ tên" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
+                            <Input placeholder="Nhập họ và tên" />
+                        </Form.Item>
+                        <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }, { type: 'email', message: 'Email không đúng định dạng!' }]}>
+                            <Input placeholder="Nhập địa chỉ email" />
+                        </Form.Item>
+                        <Form.Item name="department" label="Lớp hành chính" rules={[{ required: true, message: 'Vui lòng nhập lớp hành chính!' }]}>
+                            <Input placeholder="Nhập lớp hành chính" />
+                        </Form.Item>
+                        <Form.Item name="identityCode" label="Mã sinh viên" rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}>
+                            <Input placeholder="Nhập mã giảng viên" />
+                        </Form.Item>
+                        <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
+                            <Input placeholder="Nhập số điện thoại" />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                />
+            </div>
         </MainLayout>
     )
 }

@@ -25,7 +25,7 @@ const Student = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // 2. Hàm xử lý Xóa truyền vào _id
-    
+
     const handleDeleteStudent = async (studentId: string) => {
         try {
             await axios.delete(`http://103.166.183.82:4040/api/v1/student/${studentId}`, {
@@ -112,13 +112,13 @@ const Student = () => {
     const handleAddStudent = async (values: any) => {
         setLoading(true);
         try {
-            await axios.post("http://103.166.183.82:4040/api/v1/student", values, 
+            await axios.post("http://103.166.183.82:4040/api/v1/student", values,
                 {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
                 }
-            }
-        );
+            );
 
             message.success("Thêm sinh viên thành công!");
             setIsModalOpen(false);
@@ -138,59 +138,62 @@ const Student = () => {
 
     return (
         <MainLayout>
-            <Tabs
-                items={[{
-                    key: '1',
-                    label: <h2>Quản lý sinh viên</h2>,
-                    children: <Button onClick={() => setIsModalOpen(true)} type="primary">Thêm mới</Button>,
-                }]}
-                style={{ marginBottom: 20 }}
-            />
-            <Table
-                columns={columns}
-                dataSource={data}
-                loading={loading}
-                // 4. Set rowKey bằng _id để Ant Design map dữ liệu chuẩn xác
-                rowKey="_id"
-                pagination={{
-                    current: page,
-                    pageSize: limit,
-                    total: total,
-                    onChange: setPage
-                }}
-            />
+            <div style={{border: "1px solid" , padding: 24, borderRadius:10 , margin:10}}>
+                <Tabs
+                    items={[{
+                        key: '1',
+                        label: <h2>Quản lý sinh viên</h2>,
+                        children: <Button onClick={() => setIsModalOpen(true)} type="primary">Thêm mới</Button>,
+                    }]}
+                    style={{ marginBottom: 20 }}
+                />
+                <Table
+                    style={{ border: "1px solid", borderRadius: 10 }}
+                    columns={columns}
+                    dataSource={data}
+                    loading={loading}
+                    // 4. Set rowKey bằng _id để Ant Design map dữ liệu chuẩn xác
+                    rowKey="_id"
+                    pagination={{
+                        current: page,
+                        pageSize: limit,
+                        total: total,
+                        onChange: setPage
+                    }}
+                />
 
-            <Modal
-                title="Thêm sinh viên"
-                open={isModalOpen}
-                onOk={() => form.submit()}
-                onCancel={() => {
-                    setIsModalOpen(false);
-                    form.resetFields();
-                }}
-            >
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={handleAddStudent}
+                <Modal
+                    title="Thêm sinh viên"
+                    open={isModalOpen}
+                    onOk={() => form.submit()}
+                    onCancel={() => {
+                        setIsModalOpen(false);
+                        form.resetFields();
+                    }}
                 >
-                    <Form.Item name="fullName" label="Họ tên" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
-                        <Input placeholder="Nhập họ và tên" />
-                    </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }, { type: 'email', message: 'Email không đúng định dạng!' }]}>
-                        <Input placeholder="Nhập địa chỉ email" />
-                    </Form.Item>
-                    <Form.Item name="department" label="Lớp hành chính" rules={[{ required: true, message: 'Vui lòng nhập lớp hành chính!' }]}>
-                        <Input placeholder="Nhập lớp hành chính" />
-                    </Form.Item>
-                    <Form.Item name="identityCode" label="Mã sinh viên" rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}>
-                        <Input placeholder="Nhập mã sinh viên" />
-                    </Form.Item>
-                    <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
-                        <Input placeholder="Nhập số điện thoại" />
-                    </Form.Item>
-                </Form>
-            </Modal>
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleAddStudent}
+                    >
+                        <Form.Item name="fullName" label="Họ tên" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
+                            <Input placeholder="Nhập họ và tên" />
+                        </Form.Item>
+                        <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email!' }, { type: 'email', message: 'Email không đúng định dạng!' }]}>
+                            <Input placeholder="Nhập địa chỉ email" />
+                        </Form.Item>
+                        <Form.Item name="department" label="Lớp hành chính" rules={[{ required: true, message: 'Vui lòng nhập lớp hành chính!' }]}>
+                            <Input placeholder="Nhập lớp hành chính" />
+                        </Form.Item>
+                        <Form.Item name="identityCode" label="Mã sinh viên" rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}>
+                            <Input placeholder="Nhập mã sinh viên" />
+                        </Form.Item>
+                        <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
+                            <Input placeholder="Nhập số điện thoại" />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </div>
         </MainLayout>
     );
 };
