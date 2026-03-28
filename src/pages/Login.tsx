@@ -70,8 +70,8 @@ const Login = () => {
                     {/* FORM */}
                     <Card
                         style={{
-                            width: 450, // Tăng nhẹ chiều rộng
-                            borderRadius: 16, // Bo góc nhiều hơn cho hiện đại
+                            width: 450, 
+                            borderRadius: 16, 
                             // HIỆU ỨNG KÍNH MỜ (Glassmorphism) cho Card
                             backgroundColor: 'rgba(255, 255, 255, 0.12)',
                             backdropFilter: 'blur(10px)', // Mờ phần nền ngay dưới Card

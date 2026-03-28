@@ -7,7 +7,7 @@ const Teacher = () => {
     const [data, setData] = useState<Teacher[]>([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState<number>(1);
-    const [limit, setLimit] = useState<number>(10);
+    const [limit, setLimit] = useState<number>(5);
     const [total, setTotal] = useState<number>(1);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,7 +134,7 @@ const Teacher = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [page, limit])
     return (
         <MainLayout>
             <div style={{ border: "1px solid", padding: 24, borderRadius: 10, margin: 10 }}>
@@ -179,6 +179,14 @@ const Teacher = () => {
                 <Table
                     columns={columns}
                     dataSource={data}
+                    loading={loading}
+                    rowKey="_id"
+                    pagination={{
+                        current: page,
+                        pageSize: limit,
+                        total: total,
+                        onChange: setPage
+                    }}
                 />
             </div>
         </MainLayout>
