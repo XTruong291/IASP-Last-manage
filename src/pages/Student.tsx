@@ -181,7 +181,7 @@ const Student = () => {
 
     return (
         <MainLayout>
-            <div style={{ border: "1px solid", padding: 24, borderRadius: 10, margin: 10 }}>
+            <>
                 <Tabs
                     items={[{
                         key: '1',
@@ -262,9 +262,9 @@ const Student = () => {
                         <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
                             <Input placeholder="Nhập số điện thoại" />
                         </Form.Item>
-                    </Form>
+                    </Form>      
                 </Modal>
-            </div>
+            </>
         </MainLayout>
     );
 };

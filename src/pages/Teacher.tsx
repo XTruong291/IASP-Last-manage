@@ -137,7 +137,7 @@ const Teacher = () => {
     }, [page, limit])
     return (
         <MainLayout>
-            <div style={{ border: "1px solid", padding: 24, borderRadius: 10, margin: 10 }}>
+            <>
                 <Tabs
                     items={[{
                         key: '1',
@@ -188,7 +188,7 @@ const Teacher = () => {
                         onChange: setPage
                     }}
                 />
-            </div>
+            </>
         </MainLayout>
     )
 }
