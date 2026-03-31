@@ -114,7 +114,7 @@ const Student = () => {
           <Popconfirm
             title="Xóa sinh viên"
             description={`Bạn có chắc chắn muốn xóa sinh viên ${record.fullName} không?`}
-            // 3. Trỏ đúng vào record._id khi click xóa
+            
             onConfirm={() => handleDeleteStudent(record._id)}
             okText="Đồng ý"
             cancelText="Hủy"
