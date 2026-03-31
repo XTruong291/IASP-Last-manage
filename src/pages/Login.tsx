@@ -38,7 +38,7 @@ const Login = () => {
                 alignItems: 'center',
                 padding: '0 20px',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                zIndex: 10 // Đảm bảo header luôn nằm trên
+                zIndex: 10 
             }}>
                 <img width="40px" src={FitImage} alt="Logo" style={{ marginRight: 15 }} />
                 <Title level={3} style={{ color: '#fff', margin: 0, fontWeight: 400 }}>
