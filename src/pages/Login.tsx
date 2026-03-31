@@ -1,8 +1,8 @@
 import { Button, Card, Checkbox, Form, Input, Layout, Typography, message } from "antd"
 import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons'; // Thêm icon cho đẹp
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FitImage from '../assets/FIT.png';
+import api from "../api/axiosInstance";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -14,7 +14,7 @@ const Login = () => {
       
         const hideLoading = message.loading('Đang xác thực...', 0);
         try {
-            const res = await axios.post('http://103.166.183.82:4040/api/v1/user/login', values);
+            const res = await api.post('/user/login', values);
 
             localStorage.setItem('token', res.data.accessToken);
             hideLoading();

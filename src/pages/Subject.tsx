@@ -10,7 +10,7 @@ import {
 } from "antd";
 import MainLayout from "../layouts/MainLayout";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axiosInstance";
 
 const Subject = () => {
   interface Subject {
@@ -81,15 +81,7 @@ const Subject = () => {
   const handleEditSubject = async (values: any) => {
     setLoading(true);
     try {
-      await axios.put(
-        `http://103.166.183.82:4040/api/v1/subject/${editingSubject?._id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.put(`/subject/${editingSubject?._id}`, values);
       editForm.resetFields();
       message.success("Sửa môn học thành công");
       setIsEditModalOpen(false);
@@ -101,14 +93,7 @@ const Subject = () => {
 
   const handleDeleteSubject = async (subjectId: string) => {
     try {
-      await axios.delete(
-        `http://103.166.183.82:4040/api/v1/subject/${subjectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.delete(`/subject/${subjectId}`);
       message.success("xóa môn học thành công");
       fetchData();
     } catch (error) {
@@ -119,15 +104,9 @@ const Subject = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://103.166.183.82:4040/api/v1/subject/pageable",
-        {
-          params: { page, limit },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      const response = await api.get("/subject/pageable", {
+        params: { page, limit },
+      });
       setTotal(response.data.total);
       setData(response.data.data);
     } catch (error) {
@@ -144,15 +123,7 @@ const Subject = () => {
   const handleAddSubject = async (values: any) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://103.166.183.82:4040/api/v1/subject",
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      const response = await api.post("/subject", values);
       message.success("thêm môn học thành công");
       setIsModalOpen(false);
       fetchData();

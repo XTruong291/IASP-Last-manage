@@ -1,7 +1,7 @@
 import { Button, message, Popconfirm, Table, Tabs } from "antd";
 import MainLayout from "../layouts/MainLayout"
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axiosInstance";
 
 const Chapter = () => {
     interface Chapter {
@@ -64,11 +64,8 @@ const Chapter = () => {
     const fetchData = async () => {
         setLoading(true)
         try {
-            const response = await axios.get("http://103.166.183.82:4040/api/v1/chapter/pageable", {
+            const response = await api.get("/chapter/pageable", {
                 params: { page, limit },
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
             })
             setTotal(response.data.total);
             setData(response.data.data);

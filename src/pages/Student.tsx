@@ -8,7 +8,7 @@ import {
   Tabs,
   Popconfirm,
 } from "antd";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 
@@ -26,7 +26,7 @@ const Student = () => {
   const [data, setData] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit] = useState<number>(5);
   const [total, setTotal] = useState<number>(1);
   const [isEditing, setIsEditng] = useState<Student | null>(null);
 
@@ -52,15 +52,7 @@ const Student = () => {
     if (!isEditing) return;
     setLoading(true);
     try {
-      await axios.put(
-        `http://103.166.183.82:4040/api/v1/student/${isEditing._id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.put(`/student/${isEditing._id}`, values);
       message.success("Cập nhập sinh viên thành công");
       setIsEditModalOpen(false);
       setIsEditng(null);
@@ -73,14 +65,7 @@ const Student = () => {
 
   const handleDeleteStudent = async (studentId: string) => {
     try {
-      await axios.delete(
-        `http://103.166.183.82:4040/api/v1/student/${studentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.delete(`/student/${studentId}`);
       message.success("Xóa sinh viên thành công!");
       // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
       if (data.length === 1 && page > 1) {
@@ -146,15 +131,9 @@ const Student = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://103.166.183.82:4040/api/v1/student/pageable",
-        {
-          params: { page, limit },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      const response = await api.get("/student/pageable", {
+        params: { page, limit },
+      });
 
       setTotal(response.data.total);
       setData(response.data.data);
@@ -168,11 +147,7 @@ const Student = () => {
   const handleAddStudent = async (values: any) => {
     setLoading(true);
     try {
-      await axios.post("http://103.166.183.82:4040/api/v1/student", values, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.post("/student", values);
 
       message.success("Thêm sinh viên thành công!");
       setIsModalOpen(false);

@@ -9,7 +9,7 @@ import {
   Tabs,
 } from "antd";
 import MainLayout from "../layouts/MainLayout";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import { useEffect, useState } from "react";
 
 
@@ -17,7 +17,7 @@ const Teacher = () => {
   const [data, setData] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit] = useState<number>(5);
   const [total, setTotal] = useState<number>(1);
   const [editingTEacher, setEditingTeacher] = useState<Teacher | null>(null);
 
@@ -30,15 +30,9 @@ const Teacher = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://103.166.183.82:4040/api/v1/teacher/pageable",
-        {
-          params: { page, limit },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      const response = await api.get("/teacher/pageable", {
+        params: { page, limit },
+      });
       // console.log(response, ' res');
       setTotal(response.data.total);
       setData(response.data.data);
@@ -63,15 +57,7 @@ const Teacher = () => {
   };
   const handleEditTeacher = async (values: any) => {
     try {
-      await axios.put(
-        `http://103.166.183.82:4040/api/v1/teacher/${editingTEacher?._id}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.put(`/teacher/${editingTEacher?._id}`, values);
       message.success("cập nhật giảng viên thành công");
       setEditingTeacher(null);
       setIsEditModalOpen(false);
@@ -84,14 +70,7 @@ const Teacher = () => {
 
   const handleDeleteTeacher = async (teacaherId: string) => {
     try {
-      await axios.delete(
-        `http://103.166.183.82:4040/api/v1/teacher/${teacaherId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.delete(`/teacher/${teacaherId}`);
 
       message.success("Xóa giảng viên thành công!");
       // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
@@ -109,11 +88,7 @@ const Teacher = () => {
   const handleAddTeacher = async (values: any) => {
     setLoading(true);
     try {
-      await axios.post("http://103.166.183.82:4040/api/v1/teacher", values, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.post("/teacher", values);
       message.success("Thêm giảng viên thành công!");
       setIsModalOpen(false);
       form.resetFields();
