@@ -4,6 +4,7 @@ import { FormOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import FitImage from '../assets/FIT.png';
 
 const { Header, Sider, Content } = Layout;
+const SIDER_BG = "rgb(245, 245, 245)";
 
 const items = [
     {
@@ -17,7 +18,7 @@ const items = [
         icon: <UsergroupAddOutlined />,
     },
     {
-        key: "subjects-group", 
+        key: "subjects-group",
         label: "Môn học",
         icon: <FormOutlined />,
         children: [
@@ -52,28 +53,25 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                         theme={{
                             components: {
                                 Menu: {
-                                    // Chỉnh nền cho các mục menu con (inline) thành trong suốt
-                                    subMenuItemBg: 'transparent', 
-                                    // Chỉnh nền cho menu trượt ra (popup) thành trong suốt
-                                    popupBg: 'transparent',       
+                                    itemBg: SIDER_BG,
+                                    subMenuItemBg: SIDER_BG,
+                                    itemSelectedColor: "rgb(18, 105, 167)",
+                                    itemSelectedBg: "rgba(18, 105, 167, 0.1)",
+                                    itemHoverColor: "rgb(18, 105, 167)",
+                                    itemHoverBg: "rgba(18, 105, 167, 0.06)",
                                 },
                             },
                         }}
                     >
                         <Menu
-                            theme="dark"
                             mode="inline"
                             items={items}
                             onClick={({ key }) => navigate(key)}
                             selectedKeys={[location.pathname]}
                             defaultOpenKeys={["subjects-group"]}
-                            style={{
-                                background: 'transparent',
-                                width: 200,
-                                borderRight: 0 // Xoá viền phải của menu nếu cần
-                            }}
                         />
                     </ConfigProvider>
+
                 </Sider>
 
                 <Layout>
