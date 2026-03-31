@@ -67,7 +67,6 @@ const Student = () => {
     try {
       await api.delete(`/student/${studentId}`);
       message.success("Xóa sinh viên thành công!");
-      // Nếu xóa bản ghi cuối cùng của 1 trang (trừ trang 1), lùi lại 1 trang
       if (data.length === 1 && page > 1) {
         setPage(page - 1);
       } else {
