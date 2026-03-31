@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
-// Central axios instance for all API calls.
+
 // - baseURL: rút gọn URL trong các page
 // - auto attach Authorization header nếu có token trong localStorage
 const BASE_URL = "http://103.166.183.82:4040/api/v1";
