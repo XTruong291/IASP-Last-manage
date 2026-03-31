@@ -56,7 +56,7 @@ const Subject = () => {
           <Popconfirm
             title="Xóa sinh viên"
             description={`Bạn có chắc chắn muốn xóa môn ${record.name} không?`}
-            // 3. Trỏ đúng vào record._id khi click xóa
+          
             onConfirm={() => handleDeleteSubject(record._id)}
             okText="Đồng ý"
             cancelText="Hủy"
