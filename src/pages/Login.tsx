@@ -136,7 +136,7 @@ const Login = () => {
                                         borderRadius: 8,
                                         fontSize: 18,
                                         fontWeight: 600,
-                                        backgroundColor: "rgb(18, 105, 167)", // Màu xanh đồng bộ với Header
+                                        backgroundColor: "rgb(18, 105, 167)", 
                                         borderColor: "rgb(18, 105, 167)"
                                     }}
                                 >
